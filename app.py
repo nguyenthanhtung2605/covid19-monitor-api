@@ -1,6 +1,7 @@
 from flask import Flask
 import requests
 import json
+from flask import jsonify
 
 coronavirus_monitor_headers = {
     'x-rapidapi-host': "coronavirus-monitor.p.rapidapi.com",
@@ -13,6 +14,19 @@ covid_19_coronavirus_statistics_headers = {
 }
 
 app = Flask(__name__)
+
+
+@app.route('/')
+def welcome_visitor():
+    welcome_message = {"message": "welcome to Tung's team's restful api services"}
+
+    return jsonify(welcome_message)
+
+@app.route('/coronavirus')
+def get_corona_info():
+    corona_message = {"message": "welcome to the Covid19 Monitor restful api"}
+
+    return jsonify(corona_message)
 
 
 @app.route('/coronavirus/masks')
@@ -29,8 +43,8 @@ def get_affected_countries():
     url = "https://coronavirus-monitor.p.rapidapi.com/coronavirus/affected.php"
 
     response = requests.request("GET", url, headers=coronavirus_monitor_headers)
-
-    return response.text
+    json_str = json.loads(response.text)
+    return jsonify(json_str)
 
 
 @app.route('/coronavirus/cases_by_particular_country/<string:country>')
@@ -42,7 +56,8 @@ def get_history_by_particular_country(country):
 
     response = requests.request("GET", url, headers=coronavirus_monitor_headers, params=querystring)
 
-    return response.text
+    json_str = json.loads(response.text)
+    return jsonify(json_str)
 
 
 @app.route('/coronavirus/history_by_country_and_date/<string:country>/<string:date>')
@@ -55,7 +70,8 @@ def get_history_by_particular_country_by_date(country, date):
 
     response = requests.request("GET", url, headers=coronavirus_monitor_headers, params=querystring)
 
-    return response.text
+    json_str = json.loads(response.text)
+    return jsonify(json_str)
 
 
 @app.route('/coronavirus/cases_by_country')
@@ -63,8 +79,8 @@ def get_cases_by_country():
     url = "https://coronavirus-monitor.p.rapidapi.com/coronavirus/cases_by_country.php"
 
     response = requests.request("GET", url, headers=coronavirus_monitor_headers)
-
-    return response.text
+    json_str = json.loads(response.text)
+    return jsonify(json_str)
 
 
 @app.route('/coronavirus/canada_stat_small')
@@ -81,7 +97,7 @@ def get_canada_covid19_general_statistic():
     candada_stats_str.pop("id")
     candada_stats_str.pop("country_name")
 
-    return str(candada_stats_str)
+    return jsonify(candada_stats_str)
 
 
 @app.route('/coronavirus/canada')
@@ -92,7 +108,8 @@ def get_canada_cases():
 
     response = requests.request("GET", url, headers=covid_19_coronavirus_statistics_headers, params=querystring)
 
-    return response.text
+    json_str = json.loads(response.text)
+    return jsonify(json_str)
 
 
 @app.route('/coronavirus/cases_by_particular_country/<string:country>')
@@ -104,7 +121,8 @@ def get_latest_stat_by_country_name(country):
 
     response = requests.request("GET", url, headers=coronavirus_monitor_headers, params=querystring)
 
-    return response.text
+    json_str = json.loads(response.text)
+    return jsonify(json_str)
 
 
 @app.route('/coronavirus/worldstat')
@@ -113,7 +131,8 @@ def get_world_total_stat():
 
     response = requests.request("GET", url, headers=coronavirus_monitor_headers)
 
-    return response.text
+    json_str = json.loads(response.text)
+    return jsonify(json_str)
 
 
 if __name__ == '__main__':
